@@ -1,12 +1,11 @@
 package com.example.Collection.Model;
 
 import lombok.Data;
-import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
 @Document
-public class DictionaryField {
+public class DictionaryItem {
     private String name;
-    private String type;
+    private double price;
 }
