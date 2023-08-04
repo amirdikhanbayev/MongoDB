@@ -34,8 +34,8 @@ public class DictionaryController {
     }
 
     @GetMapping("/changeNameAndDescription")
-    public ResponseEntity<Dictionary> change(@RequestBody Dictionary dictionary){
-        Dictionary dictionary1 = dictionaryService.changeNameAndDescription(dictionary);
+    public ResponseEntity<Dictionary> change(@PathVariable String name, @PathVariable String newName){
+        Dictionary dictionary1 = dictionaryService.changeName(name, newName);
         return ResponseEntity.ok(dictionary1);
     }
 

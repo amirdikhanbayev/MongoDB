@@ -2,7 +2,6 @@ package com.example.Collection.Service.Dictionary;
 
 import com.example.Collection.Model.Dictionary;
 import com.example.Collection.Repository.DictionaryRepository;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -31,16 +30,10 @@ public class DictionaryServiceImpl implements DictionaryService {
     }
 
     @Override
-    public Dictionary changeNameAndDescription(Dictionary dictionary) {
-        Dictionary existDictionary = dictionaryRepository.findDictionaryByName(dictionary.getName())
-                .orElse(null);
-        Dictionary oldDictionary = dictionaryRepository.findById(dictionary.getId())
+    public Dictionary changeName(String name, String newName) {
+        Dictionary oldDictionary = findDictionaryByName(name)
                 .orElseThrow(IllegalArgumentException::new);
-        if(existDictionary != null){
-            throw new RuntimeException("Dictionary with this name " + dictionary.getName() + " already exist");
-        }
-        oldDictionary.setName(Optional.ofNullable(dictionary.getName()).orElse(oldDictionary.getName()));
-        oldDictionary.setDescription(Optional.ofNullable(dictionary.getDescription()).orElse(oldDictionary.getDescription()));
+        oldDictionary.setName(newName);
         return dictionaryRepository.save(oldDictionary);
     }
 

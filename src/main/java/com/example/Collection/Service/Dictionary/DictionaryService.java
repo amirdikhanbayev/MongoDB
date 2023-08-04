@@ -12,7 +12,6 @@ public interface DictionaryService {
 
     Optional<Dictionary> findDictionaryByName(String name);
 
-    Dictionary changeNameAndDescription(Dictionary dictionary);
-
+    Dictionary changeName(String name, String newName);
 
 }
