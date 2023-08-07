@@ -1,23 +1,21 @@
 package com.example.Collection.Model;
 
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 @Data
+@RequiredArgsConstructor
 @Document(collection = "dictionaries")
 public class DictionaryDocument {
     @Id
     private String id;
-    @Indexed(unique = true)
     private Map<String, Object> dictionaryName;
-    private Map<String, Object> fields;
-
-    public DictionaryDocument(Map<String, Object> dictionaryName, Map<String, Object> fields) {
-        this.dictionaryName = dictionaryName;
-        this.fields = fields;
-    }
+    private List<Map<String, Object>> fields;
+    private List<Map<String, Object>> data;
 }
