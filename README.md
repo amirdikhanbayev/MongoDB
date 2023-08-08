@@ -20,4 +20,7 @@ API ключ используется для обеспечения безопа
 Пожалуйста, убедитесь, что вы передаете корректный API ключ в заголовке `X-API-KEY` при использовании этих эндпойнтов.
 
 ---
+Postman Collection
+https://www.postman.com/mission-specialist-7746215/workspace/collection
+---
 Автор: Amir Dikhanbayev
