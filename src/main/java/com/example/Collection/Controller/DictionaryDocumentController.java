@@ -49,7 +49,12 @@ public class DictionaryDocumentController {
         return ResponseEntity.ok(document);
     }
 
-    @PutMapping("/updateData")
+    @DeleteMapping("/deleteData/{id}/{dataId}")
+    public ResponseEntity<DictionaryDocument> deleteData(@PathVariable String id,@PathVariable String dataId){
+        dictionaryDocumentService.deleteData(id,dataId);
+        return ResponseEntity.ok().build();
+    }
+    @PutMapping("/update")
     public ResponseEntity<DictionaryDocument> find(@RequestBody DirectoryDataDto dto){
         return ResponseEntity.ok(dictionaryDocumentService.updateData(dto));
     }

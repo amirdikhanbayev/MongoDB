@@ -6,9 +6,8 @@ import com.example.Collection.dto.DirectoryDataDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -17,7 +16,7 @@ public class DictionaryDocumentServiceImpl implements DictionaryDocumentService 
 
     @Override
     public DictionaryDocument create(DictionaryDocument dictionaryDocument) {
-        dictionaryRepository.insert(dictionaryDocument).getId();
+        dictionaryDocument = dictionaryRepository.insert(dictionaryDocument);
         String dictionaryId = dictionaryDocument.getId();
         for (int i = 0; i < dictionaryDocument.getData().size(); i++) {
             if(!dictionaryDocument.getData().get(i).containsKey("dictionaryId")){
@@ -45,34 +44,40 @@ public class DictionaryDocumentServiceImpl implements DictionaryDocumentService 
     @Override
     public DictionaryDocument addData(DirectoryDataDto dto) {
         DictionaryDocument document = findById(dto.getDictionaryId());
-        document.getData().add(dto.getData());
-        return dictionaryRepository.save(document);
+        int dataSize = document.getData().size();
+        Map<String, Object> data = new HashMap<>();
+        data.put("data" ,dto.getData());
+        document.getData().add(data);
+        if(!document.getData().get(dataSize).containsKey("dictionaryId")){
+            document.getData().get(dataSize).put("dictionaryId", dto.getDictionaryId());
+        }if(!document.getData().get(dataSize).containsKey("dataId")){
+            document.getData().get(dataSize).put("dataId", dto.getDataId());
+        }
+         return dictionaryRepository.save(document);
     }
 
     @Override
     public DictionaryDocument deleteData(String id, String dataId) {
-        DictionaryDocument document = dictionaryRepository.findById(id)
-                .orElseThrow(IllegalArgumentException::new);
-        for (int i = 0; i < document.getData().size(); i++) {
-            if(document.getData().get(i).get("dataId") == dataId) {
-                document.getData().get(i).clear();
-            }else {
-                throw new RuntimeException("Wrong data's id");
-            }
-        }
+        DictionaryDocument document = findById(id);
+        List<Map<String, Object>> newList = document.getData().stream().filter(stringObjectMap -> !stringObjectMap.get("dataId").toString().equals(dataId)).collect(Collectors.toList());
+        document.setData(newList);
         return dictionaryRepository.save(document);
     }
 
     @Override
     public DictionaryDocument updateData(DirectoryDataDto dto) {
-        DictionaryDocument document = dictionaryRepository.findById(dto.getDictionaryId())
-                .orElseThrow(IllegalArgumentException::new);
-        for (int i = 0; i < document.getData().size(); i++) {
-            if(document.getData().get(i).get("dataId") == dto.getDataId()) {
-                deleteData(dto.getDictionaryId(), dto.getDataId());
-                document.getData().add(dto.getData());
+        DictionaryDocument document = findById(dto.getDictionaryId());
+        List<Map<String, Object>> newList = document.getData().stream().map(stringObjectMap -> {
+            if (stringObjectMap.get("dataId").toString().equals(dto.getDataId())) {
+                Map<String, Object> newData = new HashMap<>();
+                newData.put("dataId", dto.getDataId());
+                newData.put("dictionaryId", dto.getDictionaryId());
+                newData.put("data", dto.getData());
+                return newData;
             }
-        }
+            return stringObjectMap;
+        }).collect(Collectors.toList());
+        document.setData(newList);
         return dictionaryRepository.save(document);
     }
 }
