@@ -23,9 +23,13 @@ repositories {
 
 dependencies {
 	implementation 'com.google.code.gson:gson:2.10.1'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'net.skobow:apikey-authentication-spring-boot-autoconfigure:0.6.1'
+	implementation 'net.skobow:apikey-authentication-spring-boot-starter:0.6.1'
+	implementation 'net.skobow:apikey-authentication:0.6.1'
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
